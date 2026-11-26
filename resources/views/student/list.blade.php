@@ -1,30 +1,23 @@
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Students</title>
-</head>
-<body>
+@section('title', 'Students')
+
+@section('content')
 
     <h1>Student List</h1>
 
-    @if(session('success'))
-        <p style="color: green;">
-            {{ session('success') }}
-        </p>
-    @endif
+    <x-alert />
 
-    <a href="/students/create">Create Student</a>
+    <a href="{{ route('students.create') }}" class="button">Create Student</a>
 
-    <br><br>
-
-    <table border="1" cellpadding="10">
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Age</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -36,37 +29,28 @@
                     <td>{{ $student->name }}</td>
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->phone }}</td>
+                    <td>{{ $student->age ?? 'N/A' }}</td>
 
                     <td>
-                        <a href="/students/{{ $student->id }}">
-                            View
-                        </a>
+                        <a href="{{ route('students.show', $student) }}">View</a> |
+                        <a href="{{ route('students.edit', $student) }}">Edit</a>
 
-                        |
-
-                        <a href="/students/{{ $student->id }}/edit">
-                            Edit
-                        </a>
-
-                        |
-
-                        <form action="/students/{{ $student->id }}" method="POST" style="display:inline;">
+                        <form action="{{ route('students.destroy', $student) }}"
+                              method="POST"
+                              style="display:inline;"
+                              onsubmit="return confirm('Delete this student?')">
                             @csrf
                             @method('DELETE')
-
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this student?')">
-                                Delete
-                            </button>
+                            <button type="submit">Delete</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5">No students found.</td>
+                    <td colspan="6">No students found.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 
-</body>
-</html>
+@endsection

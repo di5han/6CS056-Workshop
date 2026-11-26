@@ -1,24 +1,16 @@
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Courses</title>
-</head>
-<body>
+@section('title', 'Courses')
+
+@section('content')
 
     <h1>Course List</h1>
 
-    @if(session('success'))
-        <p style="color: green;">
-            {{ session('success') }}
-        </p>
-    @endif
+    <x-alert />
 
-    <a href="/courses/create">Create Course</a>
+    <a href="{{ route('courses.create') }}" class="button">Create Course</a>
 
-    <br><br>
-
-    <table border="1" cellpadding="10">
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -42,18 +34,16 @@
                     <td>{{ $course->is_active ? 'Yes' : 'No' }}</td>
 
                     <td>
-                        <a href="/courses/{{ $course->id }}">View</a>
-                        |
-                        <a href="/courses/{{ $course->id }}/edit">Edit</a>
-                        |
+                        <a href="{{ route('courses.show', $course) }}">View</a> |
+                        <a href="{{ route('courses.edit', $course) }}">Edit</a>
 
-                        <form action="/courses/{{ $course->id }}" method="POST" style="display:inline;">
+                        <form action="{{ route('courses.destroy', $course) }}"
+                              method="POST"
+                              style="display:inline;"
+                              onsubmit="return confirm('Delete this course?')">
                             @csrf
                             @method('DELETE')
-
-                            <button type="submit" onclick="return confirm('Delete this course?')">
-                                Delete
-                            </button>
+                            <button type="submit">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -65,8 +55,4 @@
         </tbody>
     </table>
 
-    <br>
-    <a href="/students">Go to Students</a>
-
-</body>
-</html>
+@endsection
