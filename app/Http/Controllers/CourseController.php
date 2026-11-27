@@ -22,7 +22,6 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
-        // Handle unchecked checkboxes as false
         $request->merge([
             'is_active' => $request->boolean('is_active'),
         ]);
